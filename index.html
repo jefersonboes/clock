@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html>
-    <head>       
+    <head>
+        <meta charset="UTF-8">
         <title>Clock</title>
+        <link href="/clock/favicon.ico" rel="icon"/>
+
         <style>
             body {
                 background: rgb(51, 51, 51);
@@ -38,11 +41,10 @@
                 playClockTick();
 
                 var now = new Date();
-                var ctx = document.getElementById('canvas').getContext('2d');
+                var ctx = canvas.getContext('2d');
                 ctx.save();
                 ctx.clearRect(0, 0, 750, 750);
                 ctx.translate(375, 375);
-                //ctx.scale(0.4,0.4);
                 ctx.scale(2, 2);
                 ctx.rotate(-Math.PI/2);
                 ctx.strokeStyle = "black";
@@ -50,25 +52,13 @@
                 ctx.lineWidth = 8;
                 ctx.lineCap = "round";
 
-                //background tests
+                //background arc
+                ctx.save();
                 ctx.beginPath();
-                //ctx.lineWidth = 14;
                 ctx.strokeStyle = '#FFFFFF';
-                ctx.arc(0,0,120,0,Math.PI*2,true);
+                ctx.arc(0, 0, 120, 0,Math.PI*2, true);
                 ctx.fill();
                 ctx.stroke();
-
-                ctx.strokeStyle = "black";
-
-                // Hour marks
-                ctx.save();
-                for (var i=0;i<12;i++){
-                    ctx.beginPath();
-                    ctx.rotate(Math.PI/6);
-                    ctx.moveTo(100,0);
-                    ctx.lineTo(120,0);
-                    ctx.stroke();
-                }
                 ctx.restore();
 
                 //digits
@@ -78,10 +68,22 @@
                 ctx.textAlign = "center";
                 ctx.rotate(Math.PI/2);
                 for (var i=1;i<=12;i++){
-                    var angle = (360 / 12) * (i - 3) * (Math.PI / 180);
+                    //var angle = (360 / 12) * (i - 3) * (Math.PI / 180);
+                    var angle = (Math.PI / 6) * (i - 3);
                     var x = Math.cos(angle) * 140;
-                    var y = 8 + Math.sin(angle) * 140;
+                    var y = 9 + Math.sin(angle) * 140;
                     ctx.fillText(i, x, y);
+                }
+                ctx.restore();
+
+                // Hour marks
+                ctx.save();
+                for (var i=0;i<12;i++){
+                    ctx.beginPath();
+                    ctx.rotate(Math.PI/6);
+                    ctx.moveTo(100, 0);
+                    ctx.lineTo(120, 0);
+                    ctx.stroke();
                 }
                 ctx.restore();
 
@@ -91,8 +93,8 @@
                 for (i=0;i<60;i++){
                     if (i%5!=0) {
                     ctx.beginPath();
-                    ctx.moveTo(117,0);
-                    ctx.lineTo(120,0);
+                    ctx.moveTo(117, 0);
+                    ctx.lineTo(120, 0);
                     ctx.stroke();
                     }
                     ctx.rotate(Math.PI/30);
@@ -111,8 +113,15 @@
                 ctx.rotate( hr*(Math.PI/6) + (Math.PI/360)*min + (Math.PI/21600)*sec )
                 ctx.lineWidth = 14;
                 ctx.beginPath();
-                ctx.moveTo(-20,0);
-                ctx.lineTo(80,0);
+                ctx.moveTo(-20, 0);
+                ctx.lineTo(80, 0);
+                ctx.stroke();
+                //green
+                ctx.strokeStyle = "#00FF00";
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.moveTo(70, 0);
+                ctx.lineTo(82, 0);
                 ctx.stroke();
                 ctx.restore();
 
@@ -121,11 +130,18 @@
                 ctx.rotate( (Math.PI/30)*min + (Math.PI/1800)*sec )
                 ctx.lineWidth = 10;
                 ctx.beginPath();
-                ctx.moveTo(-28,0);
-                ctx.lineTo(112,0);
+                ctx.moveTo(-28, 0);
+                ctx.lineTo(112, 0);
+                ctx.stroke();
+                //green
+                ctx.strokeStyle = "#00FF00";
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(100, 0);
+                ctx.lineTo(112, 0);
                 ctx.stroke();
                 ctx.restore();
-                
+
                 // Write seconds
                 ctx.save();
                 ctx.rotate(sec * Math.PI/30);
@@ -133,29 +149,27 @@
                 ctx.fillStyle = "#D40000";
                 ctx.lineWidth = 6;
                 ctx.beginPath();
-                ctx.moveTo(-30,0);
-                ctx.lineTo(83,0);
-
-                //test
-                ctx.moveTo(120,0);
-                ctx.lineTo(108,0);
-
+                ctx.moveTo(-30, 0);
+                ctx.lineTo(83, 0);
+                ctx.moveTo(121, 0);
+                ctx.lineTo(108, 0);
                 ctx.stroke();
                 ctx.beginPath();
-                ctx.arc(0,0,10,0,Math.PI*2,true);
+                ctx.arc(0, 0, 10, 0, Math.PI*2, true);
                 ctx.fill();
                 ctx.beginPath();
-                ctx.arc(95,0,10,0,Math.PI*2,true);
+                ctx.arc(95, 0, 10, 0, Math.PI*2, true);
                 ctx.stroke();
                 ctx.fillStyle = "rgba(0,0,0,0)";
-                ctx.arc(0,0,3,0,Math.PI*2,true);
+                ctx.arc(0, 0, 3, 0, Math.PI*2, true);
                 ctx.fill();
                 ctx.restore();
 
+                //box circle
                 ctx.beginPath();
                 ctx.lineWidth = 14;
                 ctx.strokeStyle = '#325FA2';
-                ctx.arc(0,0,/*142*/170,0,Math.PI*2,true);
+                ctx.arc(0, 0, 162, 0, Math.PI*2, true);
                 ctx.stroke();
 
                 ctx.restore();
@@ -167,13 +181,11 @@
         </script>        
     </head>    
     <body>
-        <link href="/clock/favicon.ico" rel="shortcut icon" type="image/x-icon" />
         <audio id="clockAudio">
             <source src="clock.mp3" type="audio/mpeg">
             Your browser does not support the audio element.
         </audio>
-
-        <div id="msg" style="color: white">Click on screen to play clock</div>
+        <div id="msg" style="color: white; display: none;">Click on the screen to play clock.</div>
         <canvas id="canvas" width="750" height="750"></canvas>
     </body>
 </html>
