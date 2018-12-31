@@ -24,7 +24,7 @@
         </style>
         <script>
             function init(){
-                clock();
+                clockUpdate();
                 setInterval(clock, 1000);
             }
 
@@ -41,9 +41,12 @@
                 }
             }
 
-            function clock(){
+            function clock() {
+                clockUpdate();
                 playClockTick();
+            }
 
+            function clockUpdate(){
                 let now = new Date();
                 let ctx = canvas.getContext('2d');
                 ctx.save();
@@ -202,7 +205,7 @@
                 canvas.width = size * 0.98;
                 canvas.height = canvas.width;
 
-                clock();
+                clockUpdate();
             }
 
             window.onload = function() {
