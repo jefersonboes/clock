@@ -17,6 +17,10 @@
                 -ms-transform: translate(-50%, -50%);
                 transform: translate(-50%, -50%);
             }
+            #msg {
+                color: white;
+                display: none;
+            }
         </style>
         <script>
             function init(){
@@ -40,12 +44,13 @@
             function clock(){
                 playClockTick();
 
-                var now = new Date();
-                var ctx = canvas.getContext('2d');
+                let now = new Date();
+                let ctx = canvas.getContext('2d');
                 ctx.save();
-                ctx.clearRect(0, 0, 750, 750);
-                ctx.translate(375, 375);
-                ctx.scale(2, 2);
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.translate(canvas.width * 0.5, canvas.height * 0.5);
+                let scale = canvas.width / 720 * 2;
+                ctx.scale(scale, scale);
                 ctx.rotate(-Math.PI/2);
                 ctx.strokeStyle = "black";
                 ctx.fillStyle = "white";
@@ -61,24 +66,33 @@
                 ctx.stroke();
                 ctx.restore();
 
+                //QUARTZ
+                ctx.save();
+                ctx.font = "12px Tahoma";
+                ctx.fillStyle = "#000000";
+                ctx.textAlign = "center";
+                ctx.rotate(Math.PI/2);
+                ctx.fillText("QUARTZ", 0, 68);
+                ctx.restore();
+
                 //digits
                 ctx.save();
                 ctx.font = "25px Tahoma";
                 ctx.fillStyle = "#00FF00";
                 ctx.textAlign = "center";
                 ctx.rotate(Math.PI/2);
-                for (var i=1;i<=12;i++){
-                    //var angle = (360 / 12) * (i - 3) * (Math.PI / 180);
-                    var angle = (Math.PI / 6) * (i - 3);
-                    var x = Math.cos(angle) * 140;
-                    var y = 9 + Math.sin(angle) * 140;
+                for (let i=1;i<=12;i++){
+                    //let angle = (360 / 12) * (i - 3) * (Math.PI / 180);
+                    let angle = (Math.PI / 6) * (i - 3);
+                    let x = Math.cos(angle) * 140;
+                    let y = 9 + Math.sin(angle) * 140;
                     ctx.fillText(i, x, y);
                 }
                 ctx.restore();
 
                 // Hour marks
                 ctx.save();
-                for (var i=0;i<12;i++){
+                for (let i=0;i<12;i++){
                     ctx.beginPath();
                     ctx.rotate(Math.PI/6);
                     ctx.moveTo(100, 0);
@@ -101,9 +115,9 @@
                 }
                 ctx.restore();
                 
-                var sec = now.getSeconds();
-                var min = now.getMinutes();
-                var hr  = now.getHours();
+                let sec = now.getSeconds();
+                let min = now.getMinutes();
+                let hr  = now.getHours();
                 hr = hr>=12 ? hr-12 : hr;
 
                 ctx.fillStyle = "black";
@@ -175,17 +189,38 @@
                 ctx.restore();
             }
 
+            function resizeCanvas() {
+                let x = document.documentElement.clientWidth;
+                let y = document.documentElement.clientHeight;
+
+                let size = 0;
+                if (x < y)
+                    size = x;
+                else
+                    size = y;
+
+                canvas.width = size * 0.98;
+                canvas.height = canvas.width;
+
+                clock();
+            }
+
             window.onload = function() {
+                resizeCanvas();
                 init();
             }
-        </script>        
-    </head>    
+
+            window.onresize = function() {                
+                resizeCanvas();
+            }
+        </script>
+    </head>
     <body>
         <audio id="clockAudio">
             <source src="clock.mp3" type="audio/mpeg">
             Your browser does not support the audio element.
         </audio>
-        <div id="msg" style="color: white; display: none;">Click on the screen to play clock.</div>
+        <div id="msg">Click on the screen to play clock.</div>
         <canvas id="canvas" width="750" height="750"></canvas>
     </body>
 </html>
