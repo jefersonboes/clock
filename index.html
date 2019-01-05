@@ -60,7 +60,7 @@
                 ctx.lineWidth = 8;
                 ctx.lineCap = "round";
 
-                //background arc
+                // background arc
                 ctx.save();
                 ctx.beginPath();
                 ctx.strokeStyle = '#FFFFFF';
@@ -69,7 +69,7 @@
                 ctx.stroke();
                 ctx.restore();
 
-                //QUARTZ
+                // QUARTZ text
                 ctx.save();
                 ctx.font = "12px Tahoma";
                 ctx.fillStyle = "#000000";
@@ -78,7 +78,7 @@
                 ctx.fillText("QUARTZ", 0, 68);
                 ctx.restore();
 
-                //digits
+                // hour digits
                 ctx.save();
                 ctx.font = "25px Tahoma";
                 ctx.fillStyle = "#00FF00";
@@ -93,7 +93,7 @@
                 }
                 ctx.restore();
 
-                // Hour marks
+                // hour marks
                 ctx.save();
                 for (let i=0;i<12;i++){
                     ctx.beginPath();
@@ -104,7 +104,7 @@
                 }
                 ctx.restore();
 
-                // Minute marks
+                // minute marks
                 ctx.save();
                 ctx.lineWidth = 5;
                 for (i=0;i<60;i++){
@@ -117,7 +117,7 @@
                     ctx.rotate(Math.PI/30);
                 }
                 ctx.restore();
-                
+
                 let sec = now.getSeconds();
                 let min = now.getMinutes();
                 let hr  = now.getHours();
@@ -127,13 +127,13 @@
 
                 // write Hours
                 ctx.save();
-                ctx.rotate( hr*(Math.PI/6) + (Math.PI/360)*min + (Math.PI/21600)*sec )
+                ctx.rotate(hr * (Math.PI/6) + (Math.PI/360) * min + (Math.PI/21600) * sec)
                 ctx.lineWidth = 14;
                 ctx.beginPath();
                 ctx.moveTo(-20, 0);
                 ctx.lineTo(80, 0);
                 ctx.stroke();
-                //green
+                // green
                 ctx.strokeStyle = "#00FF00";
                 ctx.lineWidth = 3;
                 ctx.beginPath();
@@ -144,13 +144,13 @@
 
                 // write Minutes
                 ctx.save();
-                ctx.rotate( (Math.PI/30)*min + (Math.PI/1800)*sec )
+                ctx.rotate((Math.PI/30) * min + (Math.PI/1800) * sec)
                 ctx.lineWidth = 10;
                 ctx.beginPath();
                 ctx.moveTo(-28, 0);
                 ctx.lineTo(112, 0);
                 ctx.stroke();
-                //green
+                // green
                 ctx.strokeStyle = "#00FF00";
                 ctx.lineWidth = 2;
                 ctx.beginPath();
@@ -159,7 +159,7 @@
                 ctx.stroke();
                 ctx.restore();
 
-                // Write seconds
+                // write seconds
                 ctx.save();
                 ctx.rotate(sec * Math.PI/30);
                 ctx.strokeStyle = "#D40000";
@@ -177,12 +177,9 @@
                 ctx.beginPath();
                 ctx.arc(95, 0, 10, 0, Math.PI*2, true);
                 ctx.stroke();
-                ctx.fillStyle = "rgba(0,0,0,0)";
-                ctx.arc(0, 0, 3, 0, Math.PI*2, true);
-                ctx.fill();
                 ctx.restore();
 
-                //box circle
+                // box circle
                 ctx.beginPath();
                 ctx.lineWidth = 14;
                 ctx.strokeStyle = '#325FA2';
@@ -196,13 +193,9 @@
                 let x = document.documentElement.clientWidth;
                 let y = document.documentElement.clientHeight;
 
-                let size = 0;
-                if (x < y)
-                    size = x;
-                else
-                    size = y;
+                let size = x < y ? x : y;
 
-                canvas.width = size * 0.98;
+                canvas.width = size;
                 canvas.height = canvas.width;
 
                 clockUpdate();
@@ -213,7 +206,7 @@
                 init();
             }
 
-            window.onresize = function() {                
+            window.onresize = function() {
                 resizeCanvas();
             }
         </script>
