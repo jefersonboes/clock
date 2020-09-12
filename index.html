@@ -23,13 +23,8 @@
             }
         </style>
         <script>
-            function init(){
-                clockUpdate();
-                setInterval(clock, 1000);
-            }
-
             function playClockTick() {
-                clockAudio.pause();
+                clockAudio.load();
 
                 const playPromise = clockAudio.play()
                 if (playPromise !== undefined) {
@@ -39,11 +34,6 @@
                         msg.style.display = 'block';
                     });
                 }
-            }
-
-            function clock() {
-                clockUpdate();
-                playClockTick();
             }
 
             function clockUpdate(){
@@ -201,6 +191,21 @@
                 clockUpdate();
             }
 
+            let last_second = new Date().getSeconds();
+            let tickFunction = function() {
+                let date = new Date();
+                let secs = date.getSeconds();
+                let miliSecs = date.getMilliseconds();
+
+                if (secs != last_second) {
+                    last_second = secs;
+                    clockUpdate();
+                    playClockTick();
+
+                    console.log("tick: " + secs + ":" + miliSecs);
+                }
+            }
+
             window.onload = function() {
                 resizeCanvas();
                 init();
@@ -208,6 +213,11 @@
 
             window.onresize = function() {
                 resizeCanvas();
+            }
+
+            function init(){
+                clockUpdate();
+                setInterval(tickFunction, 1);
             }
         </script>
     </head>
